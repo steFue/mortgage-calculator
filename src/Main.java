@@ -1,43 +1,14 @@
 import java.text.NumberFormat;
 import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
 
-        double principal = 0;
-        double annualInterestRate = 0;
-        int periodInYears = 0;
-
         Scanner scanner = new Scanner(System.in);
 
-        do {
-            System.out.print("Principal: ");
-            principal = scanner.nextDouble();
-
-            if (principal < 1_000 || principal > 1_000_000) {
-                System.out.println("Enter a number between 1,000 and 1,000,000 kr: ");
-            }
-        } while (principal < 1_000 || principal > 1_000_000);
-
-        do {
-            System.out.print("Annual Interest Rate: ");
-            annualInterestRate = scanner.nextDouble();
-
-            if (annualInterestRate < 1 || annualInterestRate > 30) {
-            System.out.println("Enter a value greater than 0 and less than or equal to 30: ");
-            }
-        } while (annualInterestRate < 1 || annualInterestRate > 30);
-
-        do {
-            System.out.print("Period: ");
-            periodInYears = scanner.nextInt();
-
-            if (periodInYears < 1 || periodInYears > 30) {
-                System.out.print("Enter a value greater than 0 and less than or equal to 30: ");
-            }
-        } while (periodInYears < 1 || periodInYears > 30);
+        double principal = readNumber("Principal: ", 1000, 1_000_000, scanner);
+        double annualInterestRate = readNumber("Annual Interest Rate: ", 1,30, scanner);
+        int periodInYears = readNumberIntoYears("Period (years): ", 1, 30, scanner);
 
         double mortgage = calculateMortgage(principal, annualInterestRate, periodInYears);
 
@@ -47,6 +18,39 @@ public class Main {
         scanner.close();
 
     }
+
+    public static int readNumberIntoYears (String prompt, int min, int max, Scanner input) {
+        int number = 0;
+
+        do {
+            System.out.print(prompt);
+            if (!input.hasNextInt()) {
+                System.out.println("Enter a value between " + min + " and " + max + ": ");
+                input.next();
+            } else {
+                number = input.nextInt();
+                if (number < min || number > max) {
+                    System.out.println("Enter a value between " + min + " and " + max + ": ");
+                }
+            }
+        } while (number < min || number > max);
+        return number;
+    }
+
+    public static double readNumber (String prompt, double min, double max, Scanner input) {
+        double number;
+
+        do {
+            System.out.print(prompt);
+            number = input.nextDouble();
+
+            if (number < min || number > max) {
+                System.out.println("Enter a value between " + min + " and " + max + ": ");
+            }
+        } while (number < min || number > max);
+        return number;
+    }
+
     public static double calculateMortgage (double principal,
                                             double annualInterestRate,
                                             int periodInYears) {
