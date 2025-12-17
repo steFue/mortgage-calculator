@@ -38,14 +38,18 @@ public class Main {
     }
 
     public static double readNumber (String prompt, double min, double max, Scanner input) {
-        double number;
+        double number = 0;
 
         do {
             System.out.print(prompt);
-            number = input.nextDouble();
-
-            if (number < min || number > max) {
+            if (!input.hasNextDouble()) {
                 System.out.println("Enter a value between " + min + " and " + max + ": ");
+                input.next();
+            } else {
+                number = input.nextDouble();
+                if (number < min || number > max) {
+                    System.out.println("Enter a value between " + min + " and " + max + ": ");
+                }
             }
         } while (number < min || number > max);
         return number;
