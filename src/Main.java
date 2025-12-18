@@ -10,10 +10,12 @@ public class Main {
         double annualInterestRate = readNumber("Annual Interest Rate: ", 1,30, scanner);
         int periodInYears = readNumberIntoYears("Period (years): ", 1, 30, scanner);
 
-        double mortgage = calculateMortgage(principal, annualInterestRate, periodInYears);
+        double monthlyPayment = calculateMortgage(principal, annualInterestRate, periodInYears);
 
-        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
-        System.out.println("Mortgage: " +  mortgageFormatted);
+        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
+        System.out.println("MORTGAGE\n"+"--------\n" + "Monthly Payments: " +   mortgageFormatted);
+        printPaymentSchedule(principal, annualInterestRate, periodInYears, monthlyPayment);
+
 
         scanner.close();
 
@@ -58,15 +60,56 @@ public class Main {
     public static double calculateMortgage (double principal,
                                             double annualInterestRate,
                                             int periodInYears) {
-        final byte MONTHS_IN_YEAR = 12;
-        final byte PERCENT = 100;
+        final int MONTHS_IN_YEAR = 12;
+        final int PERCENT = 100;
 
-        double monthlyInterest =  annualInterestRate / PERCENT / MONTHS_IN_YEAR;
+        double monthlyInterestRate =  annualInterestRate / PERCENT / MONTHS_IN_YEAR;
         int numberOfPayments = periodInYears * MONTHS_IN_YEAR;
 
-        double factor = Math.pow(1 + monthlyInterest, numberOfPayments);
-        double mortgage = principal * (monthlyInterest * factor) / (factor - 1);
+        double factor = Math.pow(1 + monthlyInterestRate, numberOfPayments);
+        double monthlyPayment = principal * (monthlyInterestRate * factor) / (factor - 1);
 
-        return mortgage;
+        return monthlyPayment;
+    }
+    public static void printPaymentSchedule (double principal,
+                                             double annualInterestRate,
+                                             int periodInYears,
+                                             double monthlyPayment) {
+
+        final int MONTHS_IN_YEAR = 12;
+        final int PERCENT = 100;
+
+        double monthlyInterestRate =  annualInterestRate / PERCENT / MONTHS_IN_YEAR;
+        int numberOfPayments = periodInYears * MONTHS_IN_YEAR;
+
+        double balance = principal;
+        double totalInterest = 0;
+
+        System.out.println();
+        System.out.println("PAYMENT SCHEDULE");
+        System.out.println("----------------");
+
+
+        for (int month = 1; month <= numberOfPayments; month++) {
+            double interest = balance * monthlyInterestRate;
+            double principalPaid = monthlyPayment - interest;
+
+            if (principalPaid > balance) {
+                principalPaid = balance;
+            }
+
+            balance -= principalPaid;
+            totalInterest += interest;
+
+            System.out.println(NumberFormat.getCurrencyInstance().format(balance));
+
+            if (balance <= 0.0000001) {
+                break;
+            }
+        }
+
+        System.out.println("---------------");
+        System.out.println("Total interest paid: " + NumberFormat.getCurrencyInstance().format(totalInterest));
+
     }
 }
