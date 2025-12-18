@@ -2,6 +2,10 @@ import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class Main {
+
+    private static final int MONTHS_IN_YEAR = 12;
+    private static final int PERCENT = 100;
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -60,8 +64,6 @@ public class Main {
     public static double calculateMortgage (double principal,
                                             double annualInterestRate,
                                             int periodInYears) {
-        final int MONTHS_IN_YEAR = 12;
-        final int PERCENT = 100;
 
         double monthlyInterestRate =  annualInterestRate / PERCENT / MONTHS_IN_YEAR;
         int numberOfPayments = periodInYears * MONTHS_IN_YEAR;
@@ -75,9 +77,6 @@ public class Main {
                                              double annualInterestRate,
                                              int periodInYears,
                                              double monthlyPayment) {
-
-        final int MONTHS_IN_YEAR = 12;
-        final int PERCENT = 100;
 
         double monthlyInterestRate =  annualInterestRate / PERCENT / MONTHS_IN_YEAR;
         int numberOfPayments = periodInYears * MONTHS_IN_YEAR;
