@@ -15,14 +15,20 @@ public class Main {
         int periodInYears = readNumberIntoYears("Period (years): ", 1, 30, scanner);
 
         double monthlyPayment = calculateMortgage(principal, annualInterestRate, periodInYears);
-
-        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
-        System.out.println("MORTGAGE\n"+"--------\n" + "Monthly Payments: " +   mortgageFormatted);
+        printMortgage(monthlyPayment);
         printPaymentSchedule(principal, annualInterestRate, periodInYears, monthlyPayment);
-
 
         scanner.close();
 
+    }
+
+    private static void printMortgage(double monthlyPayment) {
+        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
+        System.out.println(
+                  "MORTGAGE\n"
+                + "--------\n"
+                + "Monthly Payments: "
+                + mortgageFormatted);
     }
 
     public static int readNumberIntoYears (String prompt, int min, int max, Scanner input) {
@@ -85,7 +91,7 @@ public class Main {
         double totalInterest = 0;
 
         System.out.println();
-        System.out.println("PAYMENT SCHEDULE");
+        System.out.println("PAYMENT SCHEDULE:");
         System.out.println("----------------");
 
 
@@ -100,7 +106,9 @@ public class Main {
             balance -= principalPaid;
             totalInterest += interest;
 
-            System.out.println(NumberFormat.getCurrencyInstance().format(balance));
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+
+            System.out.println("Month " + month + ": " + numberFormat.format(balance));
 
             if (balance <= 0.0000001) {
                 break;
